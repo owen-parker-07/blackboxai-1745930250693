@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Stock Broker Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+  <div id="app" class="max-w-7xl mx-auto p-4">
+    <h1 class="text-3xl font-bold mb-6">Stock Broker Dashboard</h1>
+    <div id="login-section" class="max-w-md mx-auto bg-white p-6 rounded shadow">
+      <h2 class="text-xl font-semibold mb-4">Login</h2>
+      <form id="login-form" class="space-y-4">
+        <input type="text" id="username" placeholder="Username" class="w-full p-2 border rounded" required />
+        <input type="password" id="password" placeholder="Password" class="w-full p-2 border rounded" required />
+        <button type="submit" class="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700 transition">Login</button>
+      </form>
+      <p id="login-error" class="text-red-600 mt-2 hidden"></p>
+    </div>
+
+    <div id="dashboard-section" class="hidden">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-semibold">Welcome, <span id="user-name"></span></h2>
+        <button id="logout-btn" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition">Logout</button>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="bg-white p-4 rounded shadow">
+          <h3 class="font-semibold mb-2">Market Data</h3>
+          <div id="market-data" class="space-y-2 max-h-64 overflow-y-auto"></div>
+        </div>
+
+        <div class="bg-white p-4 rounded shadow">
+          <h3 class="font-semibold mb-2">Your Portfolio</h3>
+          <div id="portfolio" class="space-y-2 max-h-64 overflow-y-auto"></div>
+        </div>
+      </div>
+
+      <div class="bg-white p-4 rounded shadow mt-6">
+        <h3 class="font-semibold mb-2">Trade</h3>
+        <form id="trade-form" class="space-y-4 max-w-md">
+          <select id="trade-type" class="w-full p-2 border rounded" required>
+            <option value="">Select Instrument Type</option>
+            <option value="stock">Stock</option>
+            <option value="mutualfund">Mutual Fund</option>
+            <option value="future">Future</option>
+            <option value="option">Option</option>
+          </select>
+          <input type="text" id="trade-symbol" placeholder="Symbol" class="w-full p-2 border rounded" required />
+          <input type="number" id="trade-quantity" placeholder="Quantity" class="w-full p-2 border rounded" min="1" required />
+          <select id="trade-action" class="w-full p-2 border rounded" required>
+            <option value="">Select Action</option>
+            <option value="buy">Buy</option>
+            <option value="sell">Sell</option>
+          </select>
+          <button type="submit" class="w-full bg-green-600 text-white p-2 rounded hover:bg-green-700 transition">Execute Trade</button>
+        </form>
+        <p id="trade-message" class="mt-2"></p>
+      </div>
+
+      <div class="bg-white p-4 rounded shadow mt-6">
+        <h3 class="font-semibold mb-2">Historical Stock Price Trend</h3>
+        <canvas id="priceChart" height="100"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
