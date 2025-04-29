@@ -7,6 +7,8 @@ const loginSection = document.getElementById('login-section');
 const dashboardSection = document.getElementById('dashboard-section');
 const loginForm = document.getElementById('login-form');
 const loginError = document.getElementById('login-error');
+const registerBtn = document.getElementById('register-btn');
+const registerMessage = document.getElementById('register-message');
 const userNameSpan = document.getElementById('user-name');
 const logoutBtn = document.getElementById('logout-btn');
 const marketDataDiv = document.getElementById('market-data');
@@ -20,6 +22,7 @@ let priceChart = null;
 loginForm.addEventListener('submit', async (e) => {
   e.preventDefault();
   loginError.classList.add('hidden');
+  registerMessage.classList.add('hidden');
   const username = document.getElementById('username').value;
   const password = document.getElementById('password').value;
 
@@ -49,6 +52,36 @@ loginForm.addEventListener('submit', async (e) => {
   }
 });
 
+registerBtn.addEventListener('click', async () => {
+  loginError.classList.add('hidden');
+  registerMessage.classList.add('hidden');
+  const username = document.getElementById('username').value;
+  const password = document.getElementById('password').value;
+  if (!username || !password) {
+    loginError.textContent = 'Please enter username and password to register';
+    loginError.classList.remove('hidden');
+    return;
+  }
+  try {
+    const res = await fetch(apiBase + '/auth/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password })
+    });
+    const data = await res.json();
+    if (res.ok) {
+      registerMessage.textContent = 'Registration successful. You can now login.';
+      registerMessage.classList.remove('hidden');
+    } else {
+      loginError.textContent = data.message || 'Registration failed';
+      loginError.classList.remove('hidden');
+    }
+  } catch {
+    loginError.textContent = 'Error connecting to server';
+    loginError.classList.remove('hidden');
+  }
+});
+
 logoutBtn.addEventListener('click', () => {
   token = null;
   currentUser = null;
@@ -57,6 +90,7 @@ logoutBtn.addEventListener('click', () => {
   marketDataDiv.innerHTML = '';
   portfolioDiv.innerHTML = '';
   tradeMessage.textContent = '';
+  registerMessage.textContent = '';
   if (priceChart) {
     priceChart.destroy();
     priceChart = null;
